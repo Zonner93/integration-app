@@ -18,8 +18,14 @@ public class Category {
 
     @ManyToMany
     @JoinTable(
-            name = "category_user",
+            name = "category_event",
             joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
     private Set<Event> events;
+
+    @ManyToMany(
+            targetEntity = User.class,
+            mappedBy = "categories",
+            fetch = FetchType.LAZY)
+    private Set<User> users;
 }
