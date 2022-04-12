@@ -1,5 +1,6 @@
 package com.integration.integrationapp.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.integration.integrationapp.models.enums.EventStatus;
 import lombok.*;
 
@@ -30,10 +31,12 @@ public class Event {
     @Enumerated
     private EventStatus status;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private User host;
 
+    @JsonIgnore
     @ManyToMany(
             targetEntity = User.class,
             mappedBy = "participatesIn",
@@ -42,18 +45,21 @@ public class Event {
 
     private String description;
 
+    @JsonIgnore
     @ManyToMany(
             targetEntity = Badge.class,
             mappedBy = "events",
             fetch = FetchType.LAZY)
     private Set<Badge> rewards;
 
+    @JsonIgnore
     @ManyToMany(
             targetEntity = Category.class,
             mappedBy = "events",
             fetch = FetchType.LAZY)
     private Set<Category> categories;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "event_event_tag",
