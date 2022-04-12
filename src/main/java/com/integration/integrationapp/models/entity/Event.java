@@ -49,10 +49,10 @@ public class Event {
     private Set<Badge> rewards;
 
     @ManyToMany(
-            targetEntity = Badge.class,
+            targetEntity = Category.class,
             mappedBy = "events",
             fetch = FetchType.LAZY)
-    private Category category;
+    private Set<Category> categories;
 
     @ManyToMany
     @JoinTable(
