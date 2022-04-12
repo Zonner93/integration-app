@@ -142,6 +142,7 @@ public class DbMockData {
                                 .street("Cybernetyki 9")
                                 .build())
                         .status(EventStatus.ACTIVE)
+                        .host(userRepository.findByName("Kuba Mistrz"))
                         .description("Turniej jedzenia ostrych sosów. Zapraszam każdego - przewidziane nagrody.")
                         .rewards(
                                 new HashSet<>(

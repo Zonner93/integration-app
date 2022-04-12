@@ -1,9 +1,11 @@
 package com.integration.integrationapp.controller.controller;
 
 import com.integration.integrationapp.models.dto.UserDto;
+import com.integration.integrationapp.models.entity.Event;
 import com.integration.integrationapp.models.entity.User;
 import com.integration.integrationapp.models.mapper.CategoryMapper;
 import com.integration.integrationapp.models.mapper.UserMapper;
+import com.integration.integrationapp.repository.EventRepository;
 import com.integration.integrationapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequestMapping(path = "api/v1/users")
@@ -20,12 +23,14 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     private final CategoryMapper categoryMapper;
     private final UserMapper userMapper;
 
     @Autowired
-    public UserController(UserRepository userRepository, CategoryMapper categoryMapper, UserMapper userMapper) {
+    public UserController(UserRepository userRepository, EventRepository eventRepository, CategoryMapper categoryMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
         this.categoryMapper = categoryMapper;
         this.userMapper = userMapper;
     }
@@ -41,6 +46,21 @@ public class UserController {
         return new ResponseEntity<>(
                 "Unauthorized", HttpStatus.UNAUTHORIZED
         );
+    }
+
+    @PutMapping(path = "/event")
+    ResponseEntity<?> registerToActiveEvent(@RequestParam Long user_id,
+                                            @RequestParam Long event_id) {
+        User user = userRepository.getById(user_id);
+        Set<Event> events = user.getParticipatesIn();
+        events.add(eventRepository.getById(event_id));
+        user.setParticipatesIn(events);
+        userRepository.save(user);
+
+        return new ResponseEntity<>(
+                "OK", HttpStatus.OK
+        );
+
     }
 
     @GetMapping(path = "/all")
