@@ -13,7 +13,7 @@ public class EventDto {
     private long id;
     private CategoryDto category;
     private String name;
-    private LocalizationDto place;
+    private LocationDto place;
     private String description;
     private LocalDateTime dateStart;
     private LocalDateTime dateEnd;
