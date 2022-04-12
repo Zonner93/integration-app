@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "loclailzations")
+@Table(name = "localizations")
 public class Localization {
 
     private String name;
