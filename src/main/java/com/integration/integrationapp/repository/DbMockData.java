@@ -128,7 +128,7 @@ public class DbMockData {
                         .status(EventStatus.ACTIVE)
                         .host(userRepository.findByName("Grzegorz Szef"))
                         .description("Turniej bilardowy z prawdziwego zdarzenia. Zapraszam każdego - przewidziane nagrody.")
-                        //.categories(new HashSet<Category>(List.of(new Category[]{categoryRepository.findById(3L).get()})))
+                        .categories(new HashSet<Category>(List.of(new Category[]{categoryRepository.findByName("Bilard").get()})))
                         .build()
 
         );
@@ -148,8 +148,8 @@ public class DbMockData {
                                         badgeRepository.findAll()
                                 )
                         )
+                        .categories(new HashSet<Category>(List.of(new Category[]{categoryRepository.findByName("Jedzenie").get()})))
                         .build()
-
         );
     }
 }

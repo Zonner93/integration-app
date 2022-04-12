@@ -21,11 +21,10 @@ public class Category {
     private String name;
     private String imageURL;
 
-    @ManyToMany
-    @JoinTable(
-            name = "category_event",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    @ManyToMany(
+            targetEntity = Event.class,
+            mappedBy = "categories",
+            fetch = FetchType.LAZY)
     private Set<Event> events;
 
     @ManyToMany(

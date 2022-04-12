@@ -52,11 +52,12 @@ public class Event {
             fetch = FetchType.LAZY)
     private Set<Badge> rewards;
 
-    @JsonIgnore
-    @ManyToMany(
-            targetEntity = Category.class,
-            mappedBy = "events",
-            fetch = FetchType.LAZY)
+
+    @ManyToMany
+    @JoinTable(
+            name = "category_event",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories;
 
     @JsonIgnore
