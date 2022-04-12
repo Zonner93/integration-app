@@ -20,12 +20,12 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    private String eventName;
     private LocalDateTime dateStart;
     private LocalDateTime dateEnd;
 
     @Embedded
-    private Localization localization;
+    private Location location;
 
     @Enumerated
     private EventStatus status;
