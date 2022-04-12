@@ -12,7 +12,6 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
 @Table(name = "localizations")
 public class Localization {
 
