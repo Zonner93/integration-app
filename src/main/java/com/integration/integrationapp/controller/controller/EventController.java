@@ -1,8 +1,10 @@
 package com.integration.integrationapp.controller.controller;
 
+import com.integration.integrationapp.models.dto.EventDto;
 import com.integration.integrationapp.models.entity.Category;
 import com.integration.integrationapp.models.entity.Event;
 import com.integration.integrationapp.models.enums.EventStatus;
+import com.integration.integrationapp.models.mapper.EventMapper;
 import com.integration.integrationapp.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequestMapping(path = "api/v1/events")
@@ -19,15 +20,22 @@ import java.util.stream.Collectors;
 public class EventController {
 
     private final EventRepository eventRepository;
+    private final EventMapper eventMapper;
+
 
     @Autowired
-    public EventController(EventRepository eventRepository) {
+    public EventController(EventRepository eventRepository, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
+        this.eventMapper = eventMapper;
     }
 
     @GetMapping(path = "/upcoming")
-    List<Event> getActiveEvents() {
-        return eventRepository.findByStatus(EventStatus.ACTIVE);
+    List<EventDto> getActiveEvents() {
+        return eventRepository
+                .findByStatus(EventStatus.ACTIVE)
+                .stream().map(
+                        eventMapper::entityToDto
+                ).collect(Collectors.toList());
     }
 
 
@@ -38,7 +46,7 @@ public class EventController {
 
         if(result.isPresent())
             return new ResponseEntity<>(
-                    result.get(),HttpStatus.OK
+                    eventMapper.entityToDto(result.get()),HttpStatus.OK
             );
 
         return new ResponseEntity<>(
@@ -48,14 +56,15 @@ public class EventController {
 
     @RequestMapping
     @GetMapping(path = "/upcoming")
-    List<Event> getActiveEventsByCategory(@RequestBody CategoriesWrapper wrapper) {
+    List<EventDto> getActiveEventsByCategory(@RequestBody CategoriesWrapper wrapper) {
         return eventRepository.findByStatus(EventStatus.ACTIVE).stream()
                 .filter(event -> {
                     return event.getCategories()
                             .stream()
                             .anyMatch(category -> wrapper.categories.contains(category));
                         }
-                ).collect(Collectors.toList());
+                ).map(eventMapper::entityToDto)
+                .collect(Collectors.toList());
     }
 
     private static class CategoriesWrapper{

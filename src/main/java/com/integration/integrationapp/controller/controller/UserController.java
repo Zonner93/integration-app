@@ -41,7 +41,6 @@ public class UserController {
         return new ResponseEntity<>(
                 "Unauthorized", HttpStatus.UNAUTHORIZED
         );
-
     }
 
     @GetMapping(path = "/all")
