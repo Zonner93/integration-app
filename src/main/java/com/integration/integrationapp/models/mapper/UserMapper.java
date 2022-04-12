@@ -1,15 +1,24 @@
 package com.integration.integrationapp.models.mapper;
 
+import com.integration.integrationapp.models.dto.BadgeDto;
 import com.integration.integrationapp.models.dto.TeamDto;
 import com.integration.integrationapp.models.dto.UserDto;
+import com.integration.integrationapp.models.entity.Badge;
 import com.integration.integrationapp.models.entity.Team;
 import com.integration.integrationapp.models.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
+
+    private final BadgeMapper badgeMapper;
 
     public User dtoToEntity(UserDto userDto) {
         if (userDto == null) {
@@ -33,7 +42,7 @@ public class UserMapper {
             builder.password(userDto.getPassword());
         }
         if (Objects.nonNull(userDto.getBadges())) {
-            builder.badges(userDto.getBadges());
+            builder.badges(new HashSet<>(getListOfBadges(userDto)));
         }
         if (Objects.nonNull(userDto.getPoints())) {
             builder.points(userDto.getPoints());
@@ -46,30 +55,42 @@ public class UserMapper {
         if (user == null) {
             return null;
         }
-        User.UserBuilder builder = User.builder();
+        UserDto.UserDtoBuilder builderDto = UserDto.builder();
 
         if (Objects.nonNull(user.getId())) {
-            builder.id(user.getId());
+            builderDto.id(user.getId());
         }
         if (Objects.nonNull(user.getRole())) {
-            builder.role(user.getRole());
+            builderDto.role(user.getRole());
         }
         if (Objects.nonNull(user.getName())) {
-            builder.name(user.getName());
+            builderDto.name(user.getName());
         }
         if (Objects.nonNull(user.getEmail())) {
-            builder.email(user.getEmail());
+            builderDto.email(user.getEmail());
         }
         if (Objects.nonNull(user.getPassword())) {
-            builder.password(user.getPassword());
+            builderDto.password(user.getPassword());
         }
         if (Objects.nonNull(user.getBadges())) {
-            builder.badges(user.getBadges());
+            builderDto.badges(new HashSet<>(getListOfBadgesDto(user)));
         }
         if (Objects.nonNull(user.getPoints())) {
-            builder.points(user.getPoints());
+            builderDto.points(user.getPoints());
         }
 
-        return builder.build();
+        return builderDto.build();
+    }
+
+    private List<Badge> getListOfBadges(UserDto userDto) {
+        return userDto.getBadges().stream()
+                .map(badge -> badgeMapper.dtoToEntity(badge))
+                .collect(Collectors.toList());
+    }
+
+    private List<BadgeDto> getListOfBadgesDto(User user) {
+        return user.getBadges().stream()
+                .map(badge -> badgeMapper.entityToDto(badge))
+                .collect(Collectors.toList());
     }
 }
