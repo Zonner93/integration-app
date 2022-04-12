@@ -47,7 +47,7 @@ public class User {
 
     @OneToMany(
             targetEntity = Event.class,
-            //TODO       mappedBy = "host",
+            mappedBy = "host",
             fetch = FetchType.LAZY)
     private Event hostedEvent;
 
