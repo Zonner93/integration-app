@@ -1,10 +1,8 @@
 package com.integration.integrationapp.models.mapper;
 
 import com.integration.integrationapp.models.dto.BadgeDto;
-import com.integration.integrationapp.models.dto.TeamDto;
 import com.integration.integrationapp.models.dto.UserDto;
 import com.integration.integrationapp.models.entity.Badge;
-import com.integration.integrationapp.models.entity.Team;
 import com.integration.integrationapp.models.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -71,7 +69,8 @@ public class UserMapper {
         }
         if (Objects.nonNull(user.getBadges())) {
             builderDto.badges(new HashSet<>(getListOfBadgesDto(user)));
-            builderDto.points(user.getBadges());
+            builderDto.points(user.getBadges().stream()
+                    .mapToInt(Badge::getValue).sum());
         }
 
 
