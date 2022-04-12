@@ -30,7 +30,7 @@ public class Event {
     @Enumerated
     private EventStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_id")
     private User host;
 

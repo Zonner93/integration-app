@@ -48,8 +48,9 @@ public class User {
     @OneToMany(
             targetEntity = Event.class,
             mappedBy = "host",
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    private Event hostedEvent;
+    private Set<Event> hostedEvents;
 
     @ManyToMany
     @JoinTable(
