@@ -20,6 +20,7 @@ public class Badge {
     private String name;
     private String imageURL;
     private int points;
+    private int value;
 
     @ManyToMany
     @JoinTable(
