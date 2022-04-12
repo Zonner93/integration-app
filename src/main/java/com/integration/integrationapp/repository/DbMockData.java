@@ -123,7 +123,7 @@ public class DbMockData {
                                 .street("Piękna 9")
                                 .build())
                         .status(EventStatus.ACTIVE)
-                        //.host(userRepository.getById(1L))
+                        .host(userRepository.findByName("Grzegorz Szef"))
                         .description("Turniej bilardowy z prawdziwego zdarzenia. Zapraszam każdego - przewidziane nagrody.")
                         //.categories(new HashSet<Category>(List.of(new Category[]{categoryRepository.findById(3L).get()})))
                         .build()
