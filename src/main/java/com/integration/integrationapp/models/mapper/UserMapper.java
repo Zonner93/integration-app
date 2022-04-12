@@ -44,9 +44,6 @@ public class UserMapper {
         if (Objects.nonNull(userDto.getBadges())) {
             builder.badges(new HashSet<>(getListOfBadges(userDto)));
         }
-        if (Objects.nonNull(userDto.getPoints())) {
-            builder.points(userDto.getPoints());
-        }
 
         return builder.build();
     }
@@ -74,10 +71,9 @@ public class UserMapper {
         }
         if (Objects.nonNull(user.getBadges())) {
             builderDto.badges(new HashSet<>(getListOfBadgesDto(user)));
+            builderDto.points(user.getBadges());
         }
-        if (Objects.nonNull(user.getPoints())) {
-            builderDto.points(user.getPoints());
-        }
+
 
         return builderDto.build();
     }
