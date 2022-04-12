@@ -38,15 +38,29 @@ public class EventController {
                 ).collect(Collectors.toList());
     }
 
+    @PostMapping(path = "/")
+    ResponseEntity<?> addNewEvent(@RequestBody EventDto eventDto) {
+
+        if (eventDto != null)
+            return new ResponseEntity<>(
+                    eventRepository.save(eventMapper.dtoToEntity(eventDto)),
+                    HttpStatus.OK
+            );
+
+        return new ResponseEntity<>(
+                "Not Found", HttpStatus.NOT_FOUND
+        );
+    }
+
 
     @GetMapping(path = "/")
-    ResponseEntity<?> eventFinder (@RequestParam Long id){
+    ResponseEntity<?> eventFinder(@RequestParam Long id) {
 
         Optional<Event> result = eventRepository.findById(id);
 
-        if(result.isPresent())
+        if (result.isPresent())
             return new ResponseEntity<>(
-                    eventMapper.entityToDto(result.get()),HttpStatus.OK
+                    eventMapper.entityToDto(result.get()), HttpStatus.OK
             );
 
         return new ResponseEntity<>(
@@ -59,15 +73,15 @@ public class EventController {
     List<EventDto> getActiveEventsByCategory(@RequestBody CategoriesWrapper wrapper) {
         return eventRepository.findByStatus(EventStatus.ACTIVE).stream()
                 .filter(event -> {
-                    return event.getCategories()
-                            .stream()
-                            .anyMatch(category -> wrapper.categories.contains(category));
+                            return event.getCategories()
+                                    .stream()
+                                    .anyMatch(category -> wrapper.categories.contains(category));
                         }
                 ).map(eventMapper::entityToDto)
                 .collect(Collectors.toList());
     }
 
-    private static class CategoriesWrapper{
+    private static class CategoriesWrapper {
         List<Category> categories;
     }
 }
