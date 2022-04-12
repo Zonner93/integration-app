@@ -22,7 +22,7 @@ public class BadgeMapper {
             builder.imageURL(badgeDto.getImgUrl());
         }
         if (Objects.nonNull(badgeDto.getValue())) {
-            builder.value(badgeDto.getValue());
+            builder.points(badgeDto.getValue());
         }
         return builder.build();
     }
@@ -39,8 +39,8 @@ public class BadgeMapper {
         if (Objects.nonNull(badge.getImageURL())) {
             builderDto.imgUrl(badge.getImageURL());
         }
-        if (Objects.nonNull(badge.getValue())) {
-            builderDto.value(badge.getValue());
+        if (Objects.nonNull(badge.getPoints())) {
+            builderDto.value(badge.getPoints());
         }
         return builderDto.build();
     }

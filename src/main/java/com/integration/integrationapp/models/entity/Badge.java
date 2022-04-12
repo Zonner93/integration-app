@@ -20,7 +20,6 @@ public class Badge {
     private String name;
     private String imageURL;
     private int points;
-    private int value;
 
     @ManyToMany
     @JoinTable(
@@ -28,5 +27,12 @@ public class Badge {
             joinColumns = @JoinColumn(name = "badge_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private Set<Event> events;
+
+    @ManyToMany(
+            targetEntity = User.class,
+            mappedBy = "badges",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private Set<User> users;
 
 }

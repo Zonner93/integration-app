@@ -1,9 +1,10 @@
 package com.integration.integrationapp.controller.controller;
 
-import com.integration.integrationapp.models.entity.Category;
+import com.integration.integrationapp.models.dto.UserDto;
 import com.integration.integrationapp.models.entity.User;
+import com.integration.integrationapp.models.mapper.CategoryMapper;
+import com.integration.integrationapp.models.mapper.UserMapper;
 import com.integration.integrationapp.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +13,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping(path = "api/v1/users")
 @RestController
 public class UserController {
 
     private final UserRepository userRepository;
-    private final CategoryMapper;
+    private final CategoryMapper categoryMapper;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, CategoryMapper categoryMapper, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.categoryMapper = categoryMapper;
+        this.userMapper = userMapper;
     }
 
     @PostMapping(path = "/login")
@@ -31,7 +35,7 @@ public class UserController {
         User result = userRepository.findByEmail(email);
         if(result != null && Objects.equals(result.getPassword(), password)){
             return new ResponseEntity<>(
-                    result,HttpStatus.OK
+                    userMapper.entityToDto(result),HttpStatus.OK
             );
         }
         return new ResponseEntity<>(
@@ -41,8 +45,10 @@ public class UserController {
     }
 
     @GetMapping(path = "/all")
-    List<User> getAllUsers() {
-        return userRepository.findAll();
+    List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(
+                userMapper::entityToDto
+        ).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/categories/")
@@ -51,7 +57,10 @@ public class UserController {
 
         if(result.isPresent())
             return new ResponseEntity<>(
-                    result.get().getCategories(),HttpStatus.OK
+                    (result.get().getCategories().stream()
+                            .map(categoryMapper::entityToDto)
+                            .collect(Collectors.toList()))
+                    ,HttpStatus.OK
             );
 
         return new ResponseEntity<>(

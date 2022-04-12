@@ -56,7 +56,7 @@ public class UserMapper {
             builderDto.id(user.getId());
         }
         if (Objects.nonNull(user.getRole())) {
-            builderDto.role(user.getRole());
+            builderDto.role("user");
         }
         if (Objects.nonNull(user.getName())) {
             builderDto.name(user.getName());
@@ -70,7 +70,7 @@ public class UserMapper {
         if (Objects.nonNull(user.getBadges())) {
             builderDto.badges(new HashSet<>(getListOfBadgesDto(user)));
             builderDto.points(user.getBadges().stream()
-                    .mapToInt(Badge::getValue).sum());
+                    .mapToInt(Badge::getPoints).sum());
         }
 
 
