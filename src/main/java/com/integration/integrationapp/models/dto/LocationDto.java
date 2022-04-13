@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class BadgeDto {
+public class LocationDto {
+    private String address;
+    private String city;
     private String name;
-    private String imgUrl;
-    private int value;
 }
