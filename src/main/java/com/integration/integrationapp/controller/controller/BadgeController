@@ -1,0 +1,37 @@
+package com.integration.integrationapp.controller.controller;
+
+import com.integration.integrationapp.models.dto.BadgeDto;
+import com.integration.integrationapp.models.dto.CategoryDto;
+import com.integration.integrationapp.models.entity.Badge;
+import com.integration.integrationapp.models.mapper.BadgeMapper;
+import com.integration.integrationapp.models.mapper.CategoryMapper;
+import com.integration.integrationapp.repository.BadgeRepository;
+import com.integration.integrationapp.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequestMapping(path = "api/v1/events")
+@RestController
+public class BadgeController {
+
+    private final BadgeRepository badgeRepository;
+    private final BadgeMapper badgeMapper;
+
+    @Autowired
+    public BadgeController(BadgeRepository badgeRepository, BadgeMapper badgeMapper){
+        this.badgeRepository = badgeRepository;
+        this.badgeMapper= badgeMapper;
+    }
+
+    @GetMapping(path = "/badges")
+    List<BadgeDto> getAllBadges(){
+        return badgeRepository.findAll().stream().map(
+                badgeMapper::entityToDto
+        ).collect(Collectors.toList());
+    }
+}
