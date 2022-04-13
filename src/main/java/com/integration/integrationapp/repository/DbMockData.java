@@ -98,6 +98,9 @@ public class DbMockData {
                         .name("Kuba Mistrz")
                         .email("kuba@gmail.com")
                         .password(password)
+                        .categories(new HashSet<>(
+                                categoryRepository.findAll()
+                        ))
                         .build()
         );
         userRepository.save(
